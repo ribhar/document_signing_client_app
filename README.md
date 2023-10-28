@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+To set up and run the client React application, follow the instructions provided below:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Document Signing Client App
 
-## Available Scripts
+This is the client application for a document signing platform.
 
-In the project directory, you can run:
+## Getting Started
 
-### `npm start`
+To get started with the client application, follow the steps below.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Prerequisites
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Before you begin, ensure you have the following installed:
 
-### `npm test`
+- Node.js
+- npm (Node Package Manager)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
 
-### `npm run build`
+Follow the steps below to install and set up the client application:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```sh
+git clone https://github.com/ribhar/document_signing_client_app.git
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Navigate to the project directory:
 
-### `npm run eject`
+```sh
+cd document_signing_client_app
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Install the dependencies:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```sh
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Configuration
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Before running the application, ensure you configure the necessary environment variables. Create a `.env` file in the root directory and add the required variables. An example of the environment variables can be found in the `.env.example` file.
 
-## Learn More
+### Usage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To run the client application, use the following command:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```sh
+npm start
+```
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+The application will start running on your local server at http://localhost:3000.
 
 ### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+To deploy the client application, you can use various hosting platforms that support static website hosting, such as Netlify, Vercel, or AWS Amplify.
 
-### `npm run build` fails to minify
+## Support
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For any issues or questions related to the client application, please open an issue in the GitHub repository or contact the maintainers directly.
+
+## Contributing
+
+Contributions are welcome! If you have any improvements or new features you would like to add to the client application, please feel free to open a pull request.
+
+## License
+
+This client application is licensed under the MIT License. See the `LICENSE` file for more details.
