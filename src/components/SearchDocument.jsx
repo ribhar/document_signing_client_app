@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { getAuthToken } from '../utils/verifySessionToken';
-
-const theme = {
-  primaryColor: '#7E57C2',
-  secondaryColor: '#9575CD',
-  textColor: '#fff',
-};
+import { theme } from '../utils/appTheme';
+import { ToastContext } from '../App';
 
 const SearchContainer = styled.div`
   display: flex;
@@ -97,6 +93,7 @@ const DocumentLink = styled.a`
 const SearchDocument = () => {
   const [searchValue, setSearchValue] = useState('');
   const [document, setDocument] = useState(null);
+  const { handleShowToast } = useContext(ToastContext);
 
   const handleInputChange = (event) => {
     setSearchValue(event.target.value);
@@ -116,6 +113,7 @@ const SearchDocument = () => {
         }
       })
       .catch((error) => {
+        handleShowToast('Error fetching document','failure')
         console.error('Error fetching document:', error);
       });
   };
@@ -127,7 +125,7 @@ const SearchDocument = () => {
           type="text"
           value={searchValue}
           onChange={handleInputChange}
-          placeholder="Search by ocument ID"
+          placeholder="Search by document ID"
         />
         <SearchButton onClick={handleSearchClick}>Search</SearchButton>
       </SearchInputButtonContainer>

@@ -1,19 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 import axios from 'axios';
 import styled from 'styled-components';
 import { getAuthToken } from '../utils/verifySessionToken';
+import { ToastContext } from '../App';
+import { SignatureLabel } from '../utils/appTheme';
 
 const StyledSignatureContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-`;
-
-const SignatureCanvasLabel = styled.label`
-  font-size: 16px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const SignatureCanvasContainer = styled.div`
@@ -78,7 +76,8 @@ const SignatureCapture = ({ pdfId }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [downloadUrl, setDownloadUrl] = useState(null);
-  
+    const { handleShowToast } = useContext(ToastContext);
+
     const clear = () => {
       sigCanvas.current.clear();
     };
@@ -92,49 +91,61 @@ const SignatureCapture = ({ pdfId }) => {
         link.click();
         document.body.removeChild(link);
       } else {
-        alert('No file to download.');
+        handleShowToast('No file to download.','failure')
       }
     };
   
     const signDocument = () => {
-      const authToken = getAuthToken()
-  
+      const authToken = getAuthToken();
+      
       if (sigCanvas.current.isEmpty()) {
-        alert('Please provide a signature first.');
+        handleShowToast('Please provide a signature first.', 'failure');
       } else {
         const canvasData = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
-        const requestData = {
-          name,
-          email,
-          signature: canvasData,
-          pdfId,
-        };
-  
+    
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('signature', dataURItoBlob(canvasData));
+        // formData.append('pdfId', pdfId);
+    
         axios
-          .post(`${process.env.REACT_APP_API_BASE_URL}/doc/sign`, requestData, {
+          .post(`${process.env.REACT_APP_API_BASE_URL}/doc/sign/${pdfId}`, formData, {
             headers: {
-              'Content-Type': 'application/json',
               Authorization: `Bearer ${authToken}`,
             },
-            responseType: 'blob', // Set the response type to blob
+            responseType: 'blob',
           })
           .then((response) => {
             const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(pdfBlob);
-            setDownloadUrl(url); // Set the download URL in state
-            alert('Document signed successfully.');
+            setDownloadUrl(url);
+            handleShowToast('Document signed successfully.', 'success');
           })
           .catch((error) => {
             console.error('Error signing document:', error);
-            alert('Error signing document. Please try again.');
+            handleShowToast('Error signing document.', 'failure');
           });
       }
     };
+    
+    const dataURItoBlob = (dataURI) => {
+      const byteString = atob(dataURI.split(',')[1]);
+      const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], { type: mimeString });
+      return blob;
+    };
+    
   
   
   return (
     <StyledSignatureContainer>
-      <SignatureCanvasLabel>Please draw your signature in the box below:</SignatureCanvasLabel>
+      <SignatureLabel>Please draw your signature in the box below:</SignatureLabel>
       <SignatureCanvasContainer>
         <SignatureCanvas
             penColor="black"

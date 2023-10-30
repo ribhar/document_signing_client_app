@@ -2,23 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-
-const theme = {
-  primaryColor: '#7E57C2',
-  secondaryColor: '#9575CD',
-  textColor: '#fff',
-};
+import { theme } from '../utils/appTheme';
 
 const DocumentListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  // margin-top: 20px;
   padding: 0 58px 50px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background: linear-gradient(to right, #e6e6fa, #d8bfd8);
-  width: 94%;
+  margin: 20px;
+  width: 100%;
 `;
 
 

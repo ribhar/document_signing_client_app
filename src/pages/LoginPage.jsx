@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { setToken } from '../utils/verifySessionToken';
-
+import { ToastContext } from '../App';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -70,6 +70,8 @@ const NotRegisterTag = styled.a`
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { handleShowToast } = useContext(ToastContext);
+  
   const navigate = useNavigate();
 
   const handleGoToSignup = () => {
@@ -87,10 +89,12 @@ const LoginPage = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`, { email, password });
-      setToken(response.data.token)
+      setToken(response.data.token);
       navigate('/');
+      handleShowToast('Login successful.', 'success');
     } catch (error) {
       console.error('Error logging in:', error);
+      handleShowToast('Login failed.', 'failure');
     }
   };
 

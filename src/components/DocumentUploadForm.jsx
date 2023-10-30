@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import SignatureCapture from './SignatureCapture';
 import { getAuthToken } from '../utils/verifySessionToken';
-
-const theme = {
-  primaryColor: '#7E57C2',
-  secondaryColor: '#9575CD',
-  textColor: '#fff',
-};
+import { ToastContext } from '../App';
+import SignatureUpload from './SignatureUpload';
+import SignatureCapture from './SignatureCapture';
+import { theme } from '../utils/appTheme';
 
 const FormContainer = styled.div`
   display: flex;
@@ -16,7 +13,6 @@ const FormContainer = styled.div`
   align-items: center;
   margin: 20px;
   padding: 0 40px;
-  // border: 1px solid ${theme.primaryColor};
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background: linear-gradient(to right, #e6e6fa, #d8bfd8);
@@ -52,10 +48,31 @@ const UploadButton = styled.button`
   }
 `;
 
+const ToggleButton = styled.button`
+  background-color: #9575cd;
+  color: #fff;
+  padding: 15px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+
+  &:hover {
+    background-color: #7e57c2;
+    transform: scale(1.05);
+  }
+`;
+
+
 const DocumentUploadForm = () => {
+  const [isCaptureMode, setIsCaptureMode] = useState(false);
   const [file, setFile] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
-  const [pdfId, setpdfId] = useState(''); // New state to store the PDF URL
+  const [pdfId, setpdfId] = useState('');
+  const { handleShowToast } = useContext(ToastContext);
   
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -78,10 +95,10 @@ const DocumentUploadForm = () => {
       setUploadSuccess(true);
       setpdfId(response.data._id); 
 
-      alert('Document uploaded successfully');
+      handleShowToast('Document uploaded successfully', 'success');
     } catch (error) {
       console.error('Error uploading document:', error);
-      alert('Error uploading document. Please try again.');
+      handleShowToast('Error uploading document.', 'failure');
     }
   };
 
@@ -90,9 +107,17 @@ const DocumentUploadForm = () => {
       <Title>Upload Document</Title>
       <FileInput type="file" onChange={handleFileChange} />
       <UploadButton onClick={handleUpload}>Upload</UploadButton>
-      {uploadSuccess && pdfId && <SignatureCapture pdfId={pdfId}/>}
+      {uploadSuccess && (
+        <>
+          <ToggleButton onClick={() => setIsCaptureMode(!isCaptureMode)}>
+            {isCaptureMode ? 'Upload Signature instead?' : 'Capture Signature instead?'}
+          </ToggleButton>
+          {isCaptureMode ? <SignatureCapture pdfId={pdfId} /> : <SignatureUpload  pdfId={pdfId}/>}
+        </>
+      )}
     </FormContainer>
   );
+  
 };
 
 export default DocumentUploadForm;

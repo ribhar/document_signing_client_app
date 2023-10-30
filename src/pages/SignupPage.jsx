@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-
+import Toast from '../components/Toast';
+import { ToastContext } from '../App';
 
 const SignupContainer = styled.div`
   display: flex;
@@ -71,6 +72,8 @@ const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { handleShowToast } = useContext(ToastContext);
+
 
   const handleGoToLogin = () => {
     navigate('/login');
@@ -90,10 +93,12 @@ const SignupPage = () => {
 
   const handleSignup = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/register`, { username, email, password });
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/register`, { username, email, password });
       navigate('/login');
+      handleShowToast('Signup successful.', 'success');
     } catch (error) {
       console.error('Error signing up:', error);
+      handleShowToast('Signup failed.', 'failure');
     }
   };
 
@@ -105,8 +110,10 @@ const SignupPage = () => {
       <Input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
       <Button onClick={handleSignup}>Sign Up</Button>
       <AlreadyRegisterTag onClick={handleGoToLogin}>Already a registered user? Log in</AlreadyRegisterTag>
+      
     </SignupContainer>
   );
 };
 
 export default SignupPage;
+
