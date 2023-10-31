@@ -125,6 +125,7 @@ export const DocumentLabel = styled.span`
   font-weight: bold;
   margin-right: 5px;
   display: inline;
+  color:7E57C2;
 `;
 
 export const DocumentValue = styled.span`
@@ -136,7 +137,7 @@ export const DocumentLink = styled.a`
   background-color: ${theme.secondaryColor};
   color: ${theme.textColor};
   padding: 10px;
-  width: 80%;
+  width: 100%;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -170,7 +171,7 @@ export const DocumentListContainer = styled.div`
 export const DocumentItem = styled.div`
 //   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+  padding: 20px 40px ;
   margin: 10px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

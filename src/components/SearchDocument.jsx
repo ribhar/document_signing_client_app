@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getAuthToken } from "../utils/verifySessionToken";
 import {
   DocumentCard,
+  DocumentItem,
   DocumentLabel,
   DocumentLabelContainer,
   DocumentLink,
@@ -52,9 +53,9 @@ const SearchButton = styled.button`
 
 const SearchDocument = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [document, setDocument] = useState(null);
+  const [documents, setDocuments] = useState([]);
   const { handleShowToast } = useContext(ToastContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (event) => {
     setSearchValue(event.target.value);
@@ -62,30 +63,27 @@ const SearchDocument = () => {
 
   const handleSearchClick = () => {
     const authToken = getAuthToken();
-    try {
-      setIsLoading(true)
-      axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/doc/${searchValue}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        })
-        .then((response) => {
-          if (response.data) {
-            setDocument(response.data);
-          }
-        })
-        .catch((error) => {
-          handleShowToast("Error fetching document", "failure");
-          console.error("Error fetching document:", error);
-        });
-    } catch (error) {
-      console.error("Synchronous error:", error);
-    } finally {
-      setIsLoading(false)
-    }
+    setIsLoading(true);
+
+    axios
+      .get(`${process.env.REACT_APP_API_BASE_URL}/doc/search?search=${searchValue}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          setDocuments(response.data);
+        }
+      })
+      .catch((error) => {
+        handleShowToast("Error fetching document", "failure");
+        console.error("Error fetching document:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
-  
 
   return (
     <SearchContainer>
@@ -94,18 +92,22 @@ const SearchDocument = () => {
           type="text"
           value={searchValue}
           onChange={handleInputChange}
-          placeholder="Search by document ID"
+          placeholder="Search by document name"
         />
         <SearchButton onClick={handleSearchClick}>Search</SearchButton>
       </SearchInputButtonContainer>
-      {document && (
-        <DocumentCard>
+      {documents.map((document) => (
+        <DocumentItem key={document._id}>
           <DocumentLabelContainer>
-            <DocumentLabel>Signatory Name:</DocumentLabel>
+            <DocumentLabel>Document Name</DocumentLabel>
+            <DocumentValue>{document.docName}</DocumentValue>
+          </DocumentLabelContainer>
+          <DocumentLabelContainer>
+            <DocumentLabel>Signatory Name</DocumentLabel>
             <DocumentValue>{document.name}</DocumentValue>
           </DocumentLabelContainer>
           <DocumentLabelContainer>
-            <DocumentLabel>Signatory Email:</DocumentLabel>
+            <DocumentLabel>Signatory Email</DocumentLabel>
             <DocumentValue>{document.email}</DocumentValue>
           </DocumentLabelContainer>
           <DocumentLink
@@ -115,10 +117,12 @@ const SearchDocument = () => {
           >
             Open Document
           </DocumentLink>
-        </DocumentCard>
-      )}
+        </DocumentItem>
+      ))}
     </SearchContainer>
   );
 };
 
 export default SearchDocument;
+
+

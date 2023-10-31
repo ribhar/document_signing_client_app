@@ -26,7 +26,7 @@ const SignedDocumentList = () => {
       })
       .then((response) => {
         setDocuments(response.data);
-        setIsLoading(true); // Set isLoaded to true on successful API call
+        setIsLoading(true); 
       })
       .catch((error) => {
         console.error("Error fetching documents:", error);
@@ -34,7 +34,7 @@ const SignedDocumentList = () => {
   }, []);
 
   if (!isLoading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   return (
@@ -43,6 +43,10 @@ const SignedDocumentList = () => {
       {documents.length > 0 ? (
         documents.map((document) => (
           <DocumentItem key={document._id}>
+            <DocumentLabelContainer>
+              <DocumentLabel>Document Name:</DocumentLabel> {/* Updated label to 'Document Name' */}
+              <DocumentValue>{document.docName}</DocumentValue> {/* Added 'docName' field */}
+            </DocumentLabelContainer>
             <DocumentLabelContainer>
               <DocumentLabel>Signatory Name:</DocumentLabel>
               <DocumentValue>{document.name}</DocumentValue>
@@ -68,3 +72,4 @@ const SignedDocumentList = () => {
 };
 
 export default SignedDocumentList;
+
