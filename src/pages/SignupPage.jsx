@@ -47,7 +47,7 @@ const SignupPage = () => {
 
 
   const handleGoToLogin = () => {
-    navigate('/login');
+    navigate('/');
   };
 
   const handleUsernameChange = (event) => {
