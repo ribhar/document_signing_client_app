@@ -4,6 +4,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { setToken } from '../utils/verifySessionToken';
 import { ToastContext } from '../App';
+import Loader from '../components/Loader';
+import { Title, Input, Button } from '../utils/styles';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -17,37 +19,37 @@ const LoginContainer = styled.div`
   background: linear-gradient(to right, #e6e6fa, #d8bfd8);
 `;
 
-const Title = styled.h2`
-  color: #4a148c;
-  margin-bottom: 20px;
-`;
+// const Title = styled.h2`
+//   color: #4a148c;
+//   margin-bottom: 20px;
+// `;
 
-const Input = styled.input`
-  margin: 10px 0;
-  padding: 15px;
-  width: 100%;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
+// const Input = styled.input`
+//   margin: 10px 0;
+//   padding: 15px;
+//   width: 100%;
+//   border: none;
+//   border-radius: 5px;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// `;
 
-const Button = styled.button`
-  background-color: #9575CD;
-  color: #fff;
-  margin: 10px 0;
-  padding: 15px;
-  width: 110%;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+// export const Button = styled.button`
+//   background-color: #9575CD;
+//   color: #fff;
+//   margin: 10px 0;
+//   padding: 15px;
+//   width: 110%;
+//   border: none;
+//   border-radius: 5px;
+//   cursor: pointer;
+//   transition: background-color 0.3s, transform 0.2s;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
-  &:hover {
-    background-color: #7E57C2;
-    transform: scale(1.05);
-  }
-`;
+//   &:hover {
+//     background-color: #7E57C2;
+//     transform: scale(1.05);
+//   }
+// `;
 
 const NotRegisterTag = styled.a`
   text-decoration: none;
@@ -71,6 +73,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { handleShowToast } = useContext(ToastContext);
+  const [isLoading, setIsLoading] = useState(false);
   
   const navigate = useNavigate();
 
@@ -88,6 +91,7 @@ const LoginPage = () => {
 
   const handleLogin = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/login`, { email, password });
       setToken(response.data.token);
       navigate('/');
@@ -95,6 +99,8 @@ const LoginPage = () => {
     } catch (error) {
       console.error('Error logging in:', error);
       handleShowToast('Login failed.', 'failure');
+    }finally {
+      setIsLoading(false); 
     }
   };
 
@@ -103,7 +109,9 @@ const LoginPage = () => {
       <Title>Login</Title>
       <Input type="email" placeholder="Email" value={email} onChange={handleEmailChange} />
       <Input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
-      <Button onClick={handleLogin}>Login</Button>
+      <Button onClick={handleLogin} disabled={isLoading}>
+        {isLoading ? <Loader /> : 'Login'}
+      </Button>
       <NotRegisterTag onClick={handleGoToSignup}>Not a registered user? Sign up</NotRegisterTag>
     </LoginContainer>
   );

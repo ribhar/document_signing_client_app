@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { theme } from '../utils/appTheme';
+import React, { useState, useEffect } from "react";
+import styled, { keyframes } from "styled-components";
+import { theme } from "../utils/styles";
 
 const popUp = keyframes`
   0% {
@@ -33,7 +33,7 @@ const ToastContainer = styled.div`
   position: fixed;
   top: 3%;
   left: 39.9%;
-  background: ${({ type }) => (type === 'success' ? '#00BB00' : '#E00000')};
+  background: ${({ type }) => (type === "success" ? "#00BB00" : "#E00000")};
   color: #fff;
   padding: 15px 20px;
   border-radius: 5px;
@@ -55,7 +55,11 @@ const Toast = ({ message, type, onClose }) => {
     return () => clearTimeout(timer);
   }, [onClose]);
 
-  return <ToastContainer show={visible} type={type}>{message.message}</ToastContainer>;
+  return (
+    <ToastContainer show={visible} type={type}>
+      {message.message}
+    </ToastContainer>
+  );
 };
 
 export default Toast;
