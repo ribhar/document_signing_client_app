@@ -83,7 +83,7 @@ const DocumentUploadForm = () => {
 
   return (
     <FormContainer>
-      <Title>Upload Document</Title>
+      <Title>Sign Document</Title>
       <FileInput type="file" onChange={handleFileChange} />
       <UploadButton onClick={handleUpload}  disabled={isLoading}>
         {isLoading ? <Loader /> : 'Upload'}
