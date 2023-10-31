@@ -68,7 +68,7 @@ const ToggleButton = styled.button`
 
 
 const DocumentUploadForm = () => {
-  const [isCaptureMode, setIsCaptureMode] = useState(false);
+  const [isCaptureMode, setIsCaptureMode] = useState(true);
   const [file, setFile] = useState(null);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [pdfId, setpdfId] = useState('');
