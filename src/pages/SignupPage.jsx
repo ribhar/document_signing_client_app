@@ -6,6 +6,7 @@ import Toast from '../components/Toast';
 import { ToastContext } from '../App';
 import Loader from '../components/Loader';
 import { Title, Input, Button } from '../utils/styles';
+import { setToken } from '../utils/verifySessionToken';
 
 const SignupContainer = styled.div`
   display: flex;
@@ -47,7 +48,7 @@ const SignupPage = () => {
 
 
   const handleGoToLogin = () => {
-    navigate('/');
+    navigate('/login');
   };
 
   const handleUsernameChange = (event) => {
@@ -65,8 +66,9 @@ const SignupPage = () => {
   const handleSignup = async () => {
     try {
       setIsLoading(true)
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/register`, { username, email, password });
-      navigate('/login');
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/register`, { username, email, password });
+      setToken(response.data.token);
+      navigate('/');
       handleShowToast('Signup successful.', 'success');
     } catch (error) {
       console.error('Error signing up:', error);
